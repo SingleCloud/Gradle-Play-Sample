@@ -1,0 +1,49 @@
+plugins {
+    id 'scala'
+    id 'idea'
+    id 'play'
+}
+
+apply from: "config.gradle"
+
+
+model {
+    components {
+        play {
+            platform play: '2.6.7', scala: '2.12', java: '1.8'
+            injectedRoutesGenerator = true
+        }
+    }
+}
+
+tasks.withType(PlayRun) {
+    httpPort = project.ext.server.httpPort != null ? Integer.parseInt(project.ext.server.httpPort) : 9000
+}
+
+dependencies {
+    compileOnly "org.scala-lang:scala-library:2.12.6"
+    compileOnly "org.scala-lang:scala-compiler:2.12.6"
+    compileOnly "org.scala-lang:scala-reflect:2.12.6"
+    play "ch.qos.logback:logback-classic:1.2.3"
+
+    compileOnly "com.typesafe.play:play-guice_2.12:2.6.15"
+    play "com.typesafe.play:play-guice_2.12:2.6.15"
+    compileOnly "com.typesafe.play:play_2.12:2.6.15"
+    play "com.typesafe.play:play_2.12:2.6.15"
+}
+
+repositories {
+    jcenter()
+    maven {
+        name "lightbend-maven-releases"
+        url "https://repo.lightbend.com/lightbend/maven-release"
+    }
+    ivy {
+        name "lightbend-ivy-release"
+        url "https://repo.lightbend.com/lightbend/ivy-releases"
+        layout "ivy"
+    }
+}
+
+group 'com.scloud'
+version '1.0-SNAPSHOT'
